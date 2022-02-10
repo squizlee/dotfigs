@@ -2,13 +2,19 @@
 # Setup by installing and symlinking packages
 
 # INSTALL PACKAGES
-pacman -S fish emacs neovim kitty
+sudo pacman -S fish emacs neovim kitty 
 
-# CONFIGURE FISHER
-curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+# MAKE CONFIG FOLDERS IF NECESSARY
+pushd "$HOME/.config"
+mkdir -p fish emacs nvim kitty
+popd
 
 # SYMLINK CONFIG FILES
+source ./link.sh
 
+# CONFIGURE FISHER
+chsh -s $(which fish) "$(whoami)"
+sh -c "$(curl -fsSL https://starship.rs/install.sh)"
+fish --command "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
 
 # DONE
-echo "Make sure to run chsh -s /usr/bin/fish"

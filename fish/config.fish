@@ -6,8 +6,6 @@ alias cg="cd ~/garden"
 alias cl="clear"
 alias vim="nvim"
 alias ssh="kitty +kitten ssh"
-alias scheme="rlwrap mit-scheme"
-alias gscheme="rlwrap guile"
 
 fish_add_path ~/bin
 
