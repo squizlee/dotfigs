@@ -2,7 +2,16 @@
 # Setup by installing and symlinking packages
 
 # INSTALL PACKAGES
-sudo pacman -S fish emacs neovim kitty 
+sudo pacman -S fish emacs neovim kitty git base-devel noto-fonts ttc-iosevka
+
+# AUR SETUP
+git clone https://aur.archlinux.org/yay.git
+cd yay
+makepkg -si
+cd ..
+rm -rf yay
+
+yay -S nerd-fonts-complete
 
 # MAKE CONFIG FOLDERS IF NECESSARY
 pushd "$HOME/.config"
@@ -16,5 +25,6 @@ source ./link.sh
 chsh -s $(which fish) "$(whoami)"
 sh -c "$(curl -fsSL https://starship.rs/install.sh)"
 fish --command "curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher"
+cp ~/dotfigs/fish/conf.d/dracula.fish "$HOME/.config/fish/conf.d"
 
-# DONE
+echo "System is setup"
