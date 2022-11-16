@@ -29,14 +29,17 @@
 	(key-chord-mode 1)
 	:config
 	(setq key-chord-two-keys-delay 0.5)
-	(key-chord-define evil-insert-state-map "jj" 'evil-normal-state))
+	(key-chord-define evil-insert-state-map "jk" 'evil-normal-state))
 
-; remove unneeded UI 
+
+;; remove unneeded UI 
 (tool-bar-mode -1)
 (menu-bar-mode -1)
 (scroll-bar-mode -1)
 
-
+;;; line numbers
+(display-line-numbers-mode)
+(setq display-line-numbers 'relative)
 
 ; remove that annoying alarm bell when you press the wrong key
 (setq ring-bell-function 'ignore)
@@ -47,7 +50,7 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(package-selected-packages '(use-package)))
+ '(package-selected-packages '(zen-mode zig-mode use-package)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

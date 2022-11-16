@@ -2,7 +2,7 @@
 nmap <Space> <leader>
 
 "----- Key Bindings -----
-imap jj <Esc> 
+imap jk <Esc> 
 ""--- Window manipulation
 nmap <leader>ws :split<CR>
 nmap <leader>wj <C-w>j
