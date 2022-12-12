@@ -5,11 +5,13 @@
 sudo pacman -S fish emacs neovim kitty git base-devel noto-fonts ttc-iosevka
 
 # AUR SETUP
-git clone https://aur.archlinux.org/yay.git
-cd yay
-makepkg -si
-cd ..
-rm -rf yay
+if [ -x "$(yay -v)" ] ; then
+	git clone https://aur.archlinux.org/yay.git
+	cd yay
+	makepkg -si
+	cd ..
+	rm -rf yay
+fi
 
 yay -S nerd-fonts-complete
 
