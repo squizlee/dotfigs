@@ -1,0 +1,18 @@
+#+STARTUP: overview
+#+TITLE: EMACS CONFIG
+#+LANGUAGE: en
+
+* Config
+
+** Remove GUI
+#+BEGIN_SRC emacs-lisp
+    (tool-bar-mode -1)
+    (menu-bar-mode -1)
+    (scroll-bar-mode -1)
+#+END_SRC
+
+** Remove backup file clutter
+#+BEGIN_SRC emacs-lisp
+  (setq make-backup-files nil)
+  (setq auto-save-default nil)
+#+END_SRC
