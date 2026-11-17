@@ -5,3 +5,6 @@
 if (( $+commands[starship] )); then
   eval "$(starship init zsh)"
 fi
+
+# A little face in the prompt that reacts to failures, long commands, git, time of day.
+source "${0:A:h}/critter.zsh"

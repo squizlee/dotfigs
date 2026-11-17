@@ -52,3 +52,11 @@ custom-shader = shaders/crt.glsl
 # Note: cmd+k replaces Ghostty's default "clear screen" (use ctrl+l instead).
 keybind = cmd+j=next_tab
 keybind = cmd+k=previous_tab
+
+# Vim-style split focus. performable: only takes the key when a split exists in
+# that direction; otherwise ctrl+h/j/k/l reach the shell/editor as usual (so
+# ctrl+l still clears the screen unless there's a split to the right).
+keybind = performable:ctrl+h=goto_split:left
+keybind = performable:ctrl+j=goto_split:down
+keybind = performable:ctrl+k=goto_split:up
+keybind = performable:ctrl+l=goto_split:right

@@ -1,8 +1,8 @@
 "$schema" = 'https://starship.rs/config-schema.json'
 
-# Hacker green, one line:  ~/dotfigs master [!+] ❯
+# Hacker green, one line:  (•ᴗ•) ~/dotfigs master [!+] ❯
 add_newline = false
-format = "$directory$git_branch$git_status$character"
+format = "${env_var.CRITTER}$directory$git_branch$git_status$character"
 
 [directory]
 style = "bold #00ff41"
@@ -21,3 +21,8 @@ format = '([\[$all_status$ahead_behind\]]($style) )'
 [character]
 success_symbol = "[❯](bold #00ff41)"
 error_symbol = "[❯](bold red)"
+
+# Face set by shell/critter.zsh before each prompt.
+[env_var.CRITTER]
+style = "#00c932"
+format = "[$env_value]($style) "
