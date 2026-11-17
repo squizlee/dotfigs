@@ -199,9 +199,14 @@ def apply_default_apps() -> None:
             if len(current) > 2 and current[2].strip().lower() == bundle.lower():
                 say("·", f"{kind} → {bundle}")
                 continue
-        say("+", f"{kind} → {bundle}")
-        if not DRY_RUN:
-            subprocess.run(["duti", "-s", bundle, kind, role], check=True)
+        if DRY_RUN:
+            say("+", f"{kind} → {bundle}")
+            continue
+        result = subprocess.run(["duti", "-s", bundle, kind, role], capture_output=True, text=True)
+        if result.returncode == 0:
+            say("+", f"{kind} → {bundle}")
+        else:
+            say("!", f"{kind} → {bundle} failed: {result.stderr.strip()}")
 
 
 def section(title: str) -> None:
