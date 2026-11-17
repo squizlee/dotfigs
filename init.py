@@ -15,6 +15,8 @@ import argparse
 import json
 import platform
 import re
+import shutil
+import subprocess
 import sys
 import time
 from pathlib import Path
@@ -62,6 +64,9 @@ VSCODE_SETTINGS = (
 VSCODE_BLOCK_START = "// >>> dotfigs: terminal colors from ghostty/config (init.py rewrites this block)"
 VSCODE_BLOCK_END = "// <<< dotfigs"
 ANSI_NAMES = ["Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"]
+
+# macOS default apps per file type, one `duti -s` per line.
+DUTI = ROOT / "macos" / "duti"
 
 DRY_RUN = False
 
@@ -180,6 +185,25 @@ def sync_vscode_terminal() -> None:
         VSCODE_SETTINGS.write_text(new)
 
 
+def apply_default_apps() -> None:
+    """Point each file type in macos/duti at its app, skipping ones already set."""
+    if not shutil.which("duti"):
+        return say("!", "duti not installed (brew install duti), default apps skipped")
+    for line in DUTI.read_text().splitlines():
+        if not line.strip() or line.lstrip().startswith("#"):
+            continue
+        bundle, kind, role = line.split()
+        if kind.startswith("."):
+            # `duti -x ext` prints the current handler's name, path, then bundle id.
+            current = subprocess.run(["duti", "-x", kind[1:]], capture_output=True, text=True).stdout.split("\n")
+            if len(current) > 2 and current[2].strip().lower() == bundle.lower():
+                say("·", f"{kind} → {bundle}")
+                continue
+        say("+", f"{kind} → {bundle}")
+        if not DRY_RUN:
+            subprocess.run(["duti", "-s", bundle, kind, role], check=True)
+
+
 def section(title: str) -> None:
     print(f"\n▸ {title}")
 
@@ -205,6 +229,10 @@ def main() -> int:
 
     section("vscode")
     sync_vscode_terminal()
+
+    if platform.system() == "Darwin":
+        section("default apps")
+        apply_default_apps()
 
     section("shell")
     ensure_line(ZSHRC, ZSHRC_SOURCE, append=True)

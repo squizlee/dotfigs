@@ -1,0 +1,13 @@
+# Default apps for file types, applied by init.py with duti (brew install duti).
+# Format: <bundle id> <.ext or UTI> <role>. Find a bundle id with:
+#   osascript -e 'id of app "Visual Studio Code"'
+# Check what opens a type now: duti -x md
+com.microsoft.VSCode  .md    all
+com.microsoft.VSCode  .txt   all
+com.microsoft.VSCode  .json  all
+com.microsoft.VSCode  .yaml  all
+com.microsoft.VSCode  .yml   all
+com.microsoft.VSCode  .toml  all
+com.microsoft.VSCode  .sh    all
+com.microsoft.VSCode  .py    all
+com.microsoft.VSCode  .ts    all
