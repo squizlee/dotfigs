@@ -35,6 +35,11 @@ LINKS = {
     ROOT / "ghostty" / "shaders": HOME / ".config" / "ghostty" / "shaders",
 }
 
+# Links that only make sense on macOS.
+MACOS_LINKS = {
+    ROOT / "hammerspoon" / "init.lua": HOME / ".hammerspoon" / "init.lua",
+}
+
 # ~/.zshrc sources the repo's zshrc rather than being a symlink, so secrets and
 # machine-local setup stay out of git. Appended so it runs after oh-my-zsh.
 ZSHRC = HOME / ".zshrc"
@@ -123,6 +128,9 @@ def main() -> int:
     section("dotfiles")
     for src, dst in LINKS.items():
         link(src, dst)
+    if platform.system() == "Darwin":
+        for src, dst in MACOS_LINKS.items():
+            link(src, dst)
 
     section("shell")
     ensure_line(ZSHRC, ZSHRC_SOURCE, append=True)
