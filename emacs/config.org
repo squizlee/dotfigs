@@ -22,6 +22,11 @@
   (setq ring-bell-function 'ignore)
 #+END_SRC
 
+** Recent files
+#+BEGIN_SRC emacs-lisp
+  (recentf-mode 1)
+#+END_SRC
+
 ** Vim keybindings
 #+BEGIN_SRC emacs-lisp
   ;; Configure Evil before it is loaded.
