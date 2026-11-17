@@ -16,3 +16,65 @@
   (setq make-backup-files nil)
   (setq auto-save-default nil)
 #+END_SRC
+
+** Disable the audible bell
+#+BEGIN_SRC emacs-lisp
+  (setq ring-bell-function 'ignore)
+#+END_SRC
+
+** Vim keybindings
+#+BEGIN_SRC emacs-lisp
+  ;; Configure Evil before it is loaded.
+  (setq evil-want-keybinding nil
+        evil-want-integration t
+        evil-want-C-u-scroll t
+        evil-want-C-i-jump nil
+        evil-undo-system 'undo-redo)
+
+  (use-package evil
+    :init
+    (evil-mode 1))
+
+  ;; Extend Evil bindings to built-in and third-party modes.
+  (use-package evil-collection
+    :after evil
+    :config
+    (evil-collection-init))
+
+  ;; Press j followed quickly by k to return to normal mode.
+  (use-package evil-escape
+    :after evil
+    :init
+    (setq evil-escape-key-sequence "jk"
+          evil-escape-delay 0.2)
+    :config
+    (evil-escape-mode 1))
+#+END_SRC
+
+** Leader key
+#+BEGIN_SRC emacs-lisp
+  (use-package general
+    :after evil
+    :config
+    (general-create-definer my/leader
+      :states '(normal visual motion)
+      :keymaps 'override
+      :prefix "SPC")
+
+    (my/leader
+      "SPC" '(execute-extended-command :which-key "M-x")
+      "f f" '(find-file :which-key "find file")
+      "f s" '(save-buffer :which-key "save file")
+      "f r" '(recentf-open-files :which-key "recent files")
+      "b b" '(switch-to-buffer :which-key "switch buffer")
+      "b k" '(kill-current-buffer :which-key "kill buffer")
+      "w d" '(delete-window :which-key "delete window")
+      "w o" '(delete-other-windows :which-key "only window")
+      "w s" '(split-window-below :which-key "split below")
+      "w v" '(split-window-right :which-key "split right")
+      "q q" '(save-buffers-kill-terminal :which-key "quit Emacs")))
+
+  (use-package which-key
+    :config
+    (which-key-mode 1))
+#+END_SRC
