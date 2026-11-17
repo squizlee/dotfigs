@@ -10,7 +10,10 @@ background = #1f2715
 foreground = #00ff41
 cursor-color = #00ff41
 cursor-style = block
-cursor-style-blink = false
+cursor-style-blink = true
+# Shell integration normally swaps the cursor to a thin bar at the prompt;
+# no-cursor keeps the chunky blinking block everywhere.
+shell-integration-features = no-cursor
 selection-background = #4b5a2e
 selection-foreground = #00ff41
 
@@ -39,6 +42,10 @@ window-padding-x = 10
 window-padding-y = 8
 window-padding-balance = true
 macos-titlebar-style = tabs
+
+# Phosphor bloom + faint scanlines; tune the constants at the top of the file.
+# Comment this out to turn it off.
+custom-shader = shaders/crt.glsl
 
 # --- Keys -------------------------------------------------------------------
 # Vim-style tab movement: j = next (down), k = previous (up).

@@ -32,6 +32,7 @@ LINKS = {
     AGENTS_MD: HOME / ".codex" / "AGENTS.md",
     ROOT / "shell" / "starship.toml": HOME / ".config" / "starship.toml",
     ROOT / "ghostty" / "config": HOME / ".config" / "ghostty" / "config",
+    ROOT / "ghostty" / "shaders": HOME / ".config" / "ghostty" / "shaders",
 }
 
 # ~/.zshrc sources the repo's zshrc rather than being a symlink, so secrets and
