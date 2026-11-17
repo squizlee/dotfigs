@@ -53,6 +53,10 @@ custom-shader = shaders/crt.glsl
 keybind = cmd+j=next_tab
 keybind = cmd+k=previous_tab
 
+# Dropdown terminal from any app. Needs Accessibility permission
+# (System Settings > Privacy & Security) and Ghostty running (Open at Login).
+keybind = global:cmd+grave_accent=toggle_quick_terminal
+
 # Vim-style split focus. performable: only takes the key when a split exists in
 # that direction; otherwise ctrl+h/j/k/l reach the shell/editor as usual (so
 # ctrl+l still clears the screen unless there's a split to the right).
