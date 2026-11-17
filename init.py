@@ -30,7 +30,14 @@ SKILL_DIRS = [HOME / ".claude" / "skills", HOME / ".codex" / "skills"]
 LINKS = {
     ROOT / "emacs" / "init.el": HOME / ".config" / "emacs" / "init.el",
     AGENTS_MD: HOME / ".codex" / "AGENTS.md",
+    ROOT / "shell" / "starship.toml": HOME / ".config" / "starship.toml",
+    ROOT / "ghostty" / "config": HOME / ".config" / "ghostty" / "config",
 }
+
+# ~/.zshrc sources the repo's zshrc rather than being a symlink, so secrets and
+# machine-local setup stay out of git. Appended so it runs after oh-my-zsh.
+ZSHRC = HOME / ".zshrc"
+ZSHRC_SOURCE = f'source "{ROOT / "shell" / "zshrc"}"'
 
 # ~/.claude/CLAUDE.md imports AGENTS.md rather than being a symlink, so it can
 # still hold machine-local notes below the import.
@@ -81,14 +88,19 @@ def prune(directory: Path) -> None:
                     entry.unlink()
 
 
-def ensure_line(path: Path, line: str) -> None:
+def ensure_line(path: Path, line: str, *, append: bool = False) -> None:
     text = path.read_text() if path.exists() else ""
     if line in text.splitlines():
-        return say("·", f"{tilde(path)} imports AGENTS.md")
+        return say("·", f"{tilde(path)} has {line}")
     say("+", f"{tilde(path)} ← {line}")
     if not DRY_RUN:
         path.parent.mkdir(parents=True, exist_ok=True)
-        path.write_text(f"{line}\n\n{text}" if text else f"{line}\n")
+        if not text:
+            path.write_text(f"{line}\n")
+        elif append:
+            path.write_text(f"{text.rstrip()}\n\n{line}\n")
+        else:
+            path.write_text(f"{line}\n\n{text}")
 
 
 def section(title: str) -> None:
@@ -110,6 +122,9 @@ def main() -> int:
     section("dotfiles")
     for src, dst in LINKS.items():
         link(src, dst)
+
+    section("shell")
+    ensure_line(ZSHRC, ZSHRC_SOURCE, append=True)
 
     section("cerebrum")
     ensure_line(CLAUDE_MD, CLAUDE_IMPORT)

@@ -1,0 +1,7 @@
+# Managed by dotfigs. Sourced from the end of ~/.zshrc, which keeps
+# secrets and machine-local setup out of this repo.
+
+# Prompt: Starship, configured by ~/.config/starship.toml (-> shell/starship.toml).
+if (( $+commands[starship] )); then
+  eval "$(starship init zsh)"
+fi

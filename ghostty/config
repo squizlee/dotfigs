@@ -1,0 +1,47 @@
+# Managed by dotfigs: ~/.config/ghostty/config -> ghostty/config.
+# Army green, matching the Starship palette in shell/starship.toml.
+# Reload while running: cmd+shift+, ; list options: ghostty +show-config --default --docs
+
+# --- Look -------------------------------------------------------------------
+font-family = Iosevka
+font-size = 15
+
+background = #1f2715
+foreground = #00ff41
+cursor-color = #00ff41
+cursor-style = block
+cursor-style-blink = false
+selection-background = #4b5a2e
+selection-foreground = #00ff41
+
+# ANSI 0-7 normal, 8-15 bright. Red/yellow/blue kept distinct so errors and
+# diffs stay readable; everything else leans green.
+palette = 0=#141a0d
+palette = 1=#ff6e5e
+palette = 2=#008f11
+palette = 3=#c4e000
+palette = 4=#00a86b
+palette = 5=#3fbf7f
+palette = 6=#00c932
+palette = 7=#9fdfa8
+palette = 8=#9aa877
+palette = 9=#ff6b6b
+palette = 10=#00ff41
+palette = 11=#e5ff4d
+palette = 12=#33d68a
+palette = 13=#6fffb0
+palette = 14=#5cff8f
+palette = 15=#d6ffe0
+
+background-opacity = 0.95
+background-blur = 20
+window-padding-x = 10
+window-padding-y = 8
+window-padding-balance = true
+macos-titlebar-style = tabs
+
+# --- Keys -------------------------------------------------------------------
+# Vim-style tab movement: j = next (down), k = previous (up).
+# Note: cmd+k replaces Ghostty's default "clear screen" (use ctrl+l instead).
+keybind = cmd+j=next_tab
+keybind = cmd+k=previous_tab
