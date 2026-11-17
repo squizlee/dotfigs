@@ -12,7 +12,9 @@ Usage: ./init.py [--dry-run]
 from __future__ import annotations
 
 import argparse
+import json
 import platform
+import re
 import sys
 import time
 from pathlib import Path
@@ -49,6 +51,17 @@ ZSHRC_SOURCE = f'source "{ROOT / "shell" / "zshrc"}"'
 # still hold machine-local notes below the import.
 CLAUDE_MD = HOME / ".claude" / "CLAUDE.md"
 CLAUDE_IMPORT = f"@{AGENTS_MD}"
+
+# VS Code's settings.json is machine-local, so instead of linking it we keep a
+# generated block in it that mirrors the Ghostty colors onto the integrated terminal.
+GHOSTTY_CONFIG = ROOT / "ghostty" / "config"
+VSCODE_SETTINGS = (
+    HOME / ("Library/Application Support" if platform.system() == "Darwin" else ".config")
+    / "Code" / "User" / "settings.json"
+)
+VSCODE_BLOCK_START = "// >>> dotfigs: terminal colors from ghostty/config (init.py rewrites this block)"
+VSCODE_BLOCK_END = "// <<< dotfigs"
+ANSI_NAMES = ["Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"]
 
 DRY_RUN = False
 
@@ -109,6 +122,64 @@ def ensure_line(path: Path, line: str, *, append: bool = False) -> None:
             path.write_text(f"{line}\n\n{text}")
 
 
+def ghostty_terminal_colors() -> dict[str, str]:
+    conf: dict[str, str] = {}
+    palette: dict[int, str] = {}
+    for line in GHOSTTY_CONFIG.read_text().splitlines():
+        key, sep, value = line.partition("=")
+        if not sep or line.lstrip().startswith("#"):
+            continue
+        key, value = key.strip(), value.strip()
+        if key == "palette":
+            index, _, color = value.partition("=")
+            palette[int(index)] = color.strip()
+        else:
+            conf[key] = value
+
+    colors = {
+        "terminal.background": conf["background"],
+        "terminal.foreground": conf["foreground"],
+        "terminalCursor.foreground": conf["cursor-color"],
+        "terminal.selectionBackground": conf["selection-background"],
+        "terminal.selectionForeground": conf["selection-foreground"],
+    }
+    for i, name in enumerate(ANSI_NAMES):
+        colors[f"terminal.ansi{name}"] = palette[i]
+        colors[f"terminal.ansiBright{name}"] = palette[i + 8]
+    return colors
+
+
+def sync_vscode_terminal() -> None:
+    """Write the Ghostty colors into a marked block at the top of VS Code's settings.json."""
+    if not VSCODE_SETTINGS.exists():
+        return say("·", f"{tilde(VSCODE_SETTINGS)} not found, skipped")
+
+    settings = {
+        "workbench.colorCustomizations": ghostty_terminal_colors(),
+        # VS Code otherwise nudges low-contrast colors, so the greens drift from Ghostty's.
+        "terminal.integrated.minimumContrastRatio": 1,
+    }
+    body = json.dumps(settings, indent=2).splitlines()[1:-1]
+    block = "\n".join([f"  {VSCODE_BLOCK_START}", *body[:-1], body[-1] + ",", f"  {VSCODE_BLOCK_END}"])
+
+    text = VSCODE_SETTINGS.read_text()
+    pattern = re.compile(rf"^[ \t]*{re.escape(VSCODE_BLOCK_START)}\n.*?^[ \t]*{re.escape(VSCODE_BLOCK_END)}$", re.S | re.M)
+    outside = pattern.sub("", text)
+    clashes = [k for k in settings if f'"{k}"' in outside]
+    if clashes:
+        return say("!", f"{tilde(VSCODE_SETTINGS)} already sets {', '.join(clashes)}; remove it and rerun")
+
+    if pattern.search(text):
+        new = pattern.sub(lambda _: block, text)
+    else:
+        new = re.sub(r"^\s*\{", lambda m: f"{m.group(0)}\n{block}", text, count=1)
+    if new == text:
+        return say("·", f"{tilde(VSCODE_SETTINGS)} terminal colors")
+    say("+", f"{tilde(VSCODE_SETTINGS)} terminal colors ← ghostty/config")
+    if not DRY_RUN:
+        VSCODE_SETTINGS.write_text(new)
+
+
 def section(title: str) -> None:
     print(f"\n▸ {title}")
 
@@ -131,6 +202,9 @@ def main() -> int:
     if platform.system() == "Darwin":
         for src, dst in MACOS_LINKS.items():
             link(src, dst)
+
+    section("vscode")
+    sync_vscode_terminal()
 
     section("shell")
     ensure_line(ZSHRC, ZSHRC_SOURCE, append=True)
