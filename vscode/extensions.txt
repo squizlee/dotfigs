@@ -1,0 +1,69 @@
+# VS Code extensions init.py installs if missing (never uninstalls).
+# One ID per line; `code --list-extensions` shows what's installed.
+
+# --- editor & look
+vscodevim.vim
+dracula-theme.theme-dracula
+reesew.everforest-theme
+file-icons.file-icons
+waderyan.gitblame
+
+# --- AI
+anthropic.claude-code
+openai.chatgpt
+openai.codex-audio
+
+# --- web: js/ts, css, frameworks
+esbenp.prettier-vscode
+dbaeumer.vscode-eslint
+ms-vscode.vscode-typescript-next
+typescriptteam.native-preview
+bradlc.vscode-tailwindcss
+mrmlnc.vscode-scss
+vtfn.stylint
+viijay-kr.react-ts-css
+svelte.svelte-vscode
+bierner.lit-html
+chaliy.handlebars-preview
+ambar.bundle-size
+ritwickdey.liveserver
+
+# --- python
+ms-python.python
+ms-python.vscode-pylance
+ms-python.debugpy
+ms-python.black-formatter
+
+# --- c, c++, build
+ms-vscode.cpptools
+ms-vscode.cpptools-extension-pack
+ms-vscode.cpptools-themes
+ms-vscode.cpp-devtools
+ms-vscode.cmake-tools
+twxs.cmake
+ms-vscode.makefile-tools
+llvm-vs-code-extensions.lldb-dap
+
+# --- other languages
+golang.go
+dart-code.dart-code
+dart-code.flutter
+swiftlang.swift-vscode
+evzen-wybitul.magic-racket
+slevesque.shader
+
+# --- config & data formats
+redhat.vscode-yaml
+tamasfe.even-better-toml
+4ops.terraform
+skellock.just
+phil294.sqlite-runner-lsp
+jock.svg
+shd101wyy.markdown-preview-enhanced
+
+# --- containers, ci, collaboration
+ms-azuretools.vscode-docker
+ms-azuretools.vscode-containers
+ms-vscode-remote.remote-containers
+github.vscode-github-actions
+ms-vsliveshare.vsliveshare

@@ -27,6 +27,11 @@ CEREBRUM = ROOT / "cerebrum"
 SKILLS = CEREBRUM / "skills"
 AGENTS_MD = CEREBRUM / "AGENTS.md"
 
+VSCODE_SETTINGS = (
+    HOME / ("Library/Application Support" if platform.system() == "Darwin" else ".config")
+    / "Code" / "User" / "settings.json"
+)
+
 # Agent harnesses that should see every cerebrum skill.
 SKILL_DIRS = [HOME / ".claude" / "skills", HOME / ".codex" / "skills"]
 
@@ -37,6 +42,7 @@ LINKS = {
     ROOT / "shell" / "starship.toml": HOME / ".config" / "starship.toml",
     ROOT / "ghostty" / "config": HOME / ".config" / "ghostty" / "config",
     ROOT / "ghostty" / "shaders": HOME / ".config" / "ghostty" / "shaders",
+    ROOT / "vscode" / "settings.json": VSCODE_SETTINGS,
 }
 
 # Links that only make sense on macOS.
@@ -54,16 +60,15 @@ ZSHRC_SOURCE = f'source "{ROOT / "shell" / "zshrc"}"'
 CLAUDE_MD = HOME / ".claude" / "CLAUDE.md"
 CLAUDE_IMPORT = f"@{AGENTS_MD}"
 
-# VS Code's settings.json is machine-local, so instead of linking it we keep a
-# generated block in it that mirrors the Ghostty colors onto the integrated terminal.
+# vscode/settings.json is linked in like the other dotfiles; a generated block at
+# its top mirrors the Ghostty colors onto the integrated terminal.
 GHOSTTY_CONFIG = ROOT / "ghostty" / "config"
-VSCODE_SETTINGS = (
-    HOME / ("Library/Application Support" if platform.system() == "Darwin" else ".config")
-    / "Code" / "User" / "settings.json"
-)
 VSCODE_BLOCK_START = "// >>> dotfigs: terminal colors from ghostty/config (init.py rewrites this block)"
 VSCODE_BLOCK_END = "// <<< dotfigs"
 ANSI_NAMES = ["Black", "Red", "Green", "Yellow", "Blue", "Magenta", "Cyan", "White"]
+
+# Extensions to install if missing; ones not listed are left alone.
+VSCODE_EXTENSIONS = ROOT / "vscode" / "extensions.txt"
 
 # macOS default apps per file type, one `duti -s` per line.
 DUTI = ROOT / "macos" / "duti"
@@ -185,6 +190,30 @@ def sync_vscode_terminal() -> None:
         VSCODE_SETTINGS.write_text(new)
 
 
+def install_vscode_extensions() -> None:
+    """Install each extension in vscode/extensions.txt that isn't already installed."""
+    if not shutil.which("code"):
+        return say("!", "`code` not on PATH (VS Code: Shell Command: Install 'code'), extensions skipped")
+    wanted = [
+        line.strip() for line in VSCODE_EXTENSIONS.read_text().splitlines()
+        if line.strip() and not line.lstrip().startswith("#")
+    ]
+    listed = subprocess.run(["code", "--list-extensions"], capture_output=True, text=True).stdout
+    installed = {ext.lower() for ext in listed.split()}
+    missing = [ext for ext in wanted if ext.lower() not in installed]
+    if not missing:
+        return say("·", f"{len(wanted)} extensions")
+    for ext in missing:
+        if DRY_RUN:
+            say("+", ext)
+            continue
+        result = subprocess.run(["code", "--install-extension", ext], capture_output=True, text=True)
+        if result.returncode == 0:
+            say("+", ext)
+        else:
+            say("!", f"{ext} failed: {(result.stderr or result.stdout).strip()}")
+
+
 def apply_default_apps() -> None:
     """Point each file type in macos/duti at its app, skipping ones already set."""
     if not shutil.which("duti"):
@@ -234,6 +263,7 @@ def main() -> int:
 
     section("vscode")
     sync_vscode_terminal()
+    install_vscode_extensions()
 
     if platform.system() == "Darwin":
         section("default apps")

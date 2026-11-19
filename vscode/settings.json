@@ -1,0 +1,84 @@
+{
+  // >>> dotfigs: terminal colors from ghostty/config (init.py rewrites this block)
+  "workbench.colorCustomizations": {
+    "terminal.background": "#1f2715",
+    "terminal.foreground": "#00ff41",
+    "terminalCursor.foreground": "#00ff41",
+    "terminal.selectionBackground": "#4b5a2e",
+    "terminal.selectionForeground": "#00ff41",
+    "terminal.ansiBlack": "#141a0d",
+    "terminal.ansiBrightBlack": "#9aa877",
+    "terminal.ansiRed": "#ff6e5e",
+    "terminal.ansiBrightRed": "#ff6b6b",
+    "terminal.ansiGreen": "#008f11",
+    "terminal.ansiBrightGreen": "#00ff41",
+    "terminal.ansiYellow": "#c4e000",
+    "terminal.ansiBrightYellow": "#e5ff4d",
+    "terminal.ansiBlue": "#00a86b",
+    "terminal.ansiBrightBlue": "#33d68a",
+    "terminal.ansiMagenta": "#3fbf7f",
+    "terminal.ansiBrightMagenta": "#6fffb0",
+    "terminal.ansiCyan": "#00c932",
+    "terminal.ansiBrightCyan": "#5cff8f",
+    "terminal.ansiWhite": "#9fdfa8",
+    "terminal.ansiBrightWhite": "#d6ffe0"
+  },
+  "terminal.integrated.minimumContrastRatio": 1,
+  // <<< dotfigs
+
+  // --- window & workbench
+  "window.zoomLevel": 1,
+  "workbench.colorTheme": "Dracula Theme",
+  "workbench.iconTheme": "file-icons",
+  "workbench.secondarySideBar.defaultVisibility": "hidden",
+  "workbench.browser.openLocalhostLinks": false,
+
+  // --- editor
+  "editor.fontFamily": "Iosevka, Menlo, Monaco, 'Courier New', monospace",
+  "editor.fontSize": 13,
+  "editor.lineNumbers": "relative",
+  "editor.formatOnSave": true,
+
+  // --- files & explorer
+  "files.associations": {
+    "*.tmpl": "html"
+  },
+  "files.exclude": {
+    "**/.git": false
+  },
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+
+  // --- vim
+  "vim.useSystemClipboard": true,
+  "vim.insertModeKeyBindings": [
+    {
+      "before": ["j", "k"],
+      "after": ["<Esc>"]
+    }
+  ],
+
+  // --- languages
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "js/ts.experimental.useTsgo": true,
+  "python.analysis.typeCheckingMode": "basic",
+  "go.toolsManagement.autoUpdate": true,
+  "C_Cpp.default.includePath": ["/opt/homebrew/include"],
+  "dart.flutterSdkPath": "/Users/ethan/dev/flutter",
+  "yaml.disableSchemaDetection": [
+    "**/.github/workflows/*.yml",
+    "**/.github/workflows/*.yaml",
+    "**/.gitea/workflows/*.yml",
+    "**/.gitea/workflows/*.yaml",
+    "**/.forgejo/workflows/*.yml",
+    "**/.forgejo/workflows/*.yaml"
+  ],
+
+  // --- extensions
+  "redhat.telemetry.enabled": false
+}
