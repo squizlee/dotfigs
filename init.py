@@ -84,9 +84,11 @@ def tilde(p: Path) -> str:
     return str(p).replace(str(HOME), "~", 1)
 
 
-def link(src: Path, dst: Path) -> None:
+def link(src: Path, dst: Path, *, quiet_if_current: bool = False) -> bool:
     if dst.is_symlink() and dst.resolve() == src.resolve():
-        return say("·", tilde(dst))
+        if not quiet_if_current:
+            say("·", tilde(dst))
+        return False
 
     if dst.is_symlink():
         say("↻", f"{tilde(dst)} (relinked)")
@@ -103,6 +105,7 @@ def link(src: Path, dst: Path) -> None:
     if not DRY_RUN:
         dst.parent.mkdir(parents=True, exist_ok=True)
         dst.symlink_to(src)
+    return True
 
 
 def prune(directory: Path) -> None:
@@ -184,8 +187,8 @@ def sync_vscode_terminal() -> None:
     else:
         new = re.sub(r"^\s*\{", lambda m: f"{m.group(0)}\n{block}", text, count=1)
     if new == text:
-        return say("·", f"{tilde(VSCODE_SETTINGS)} terminal colors")
-    say("+", f"{tilde(VSCODE_SETTINGS)} terminal colors ← ghostty/config")
+        return say("·", "terminal colors match ghostty/config")
+    say("+", "terminal colors ← ghostty/config")
     if not DRY_RUN:
         VSCODE_SETTINGS.write_text(new)
 
@@ -218,6 +221,7 @@ def apply_default_apps() -> None:
     """Point each file type in macos/duti at its app, skipping ones already set."""
     if not shutil.which("duti"):
         return say("!", "duti not installed (brew install duti), default apps skipped")
+    current_types: dict[str, list[str]] = {}
     for line in DUTI.read_text().splitlines():
         if not line.strip() or line.lstrip().startswith("#"):
             continue
@@ -226,7 +230,7 @@ def apply_default_apps() -> None:
             # `duti -x ext` prints the current handler's name, path, then bundle id.
             current = subprocess.run(["duti", "-x", kind[1:]], capture_output=True, text=True).stdout.split("\n")
             if len(current) > 2 and current[2].strip().lower() == bundle.lower():
-                say("·", f"{kind} → {bundle}")
+                current_types.setdefault(bundle, []).append(kind)
                 continue
         if DRY_RUN:
             say("+", f"{kind} → {bundle}")
@@ -236,6 +240,8 @@ def apply_default_apps() -> None:
             say("+", f"{kind} → {bundle}")
         else:
             say("!", f"{kind} → {bundle} failed: {result.stderr.strip()}")
+    for bundle, kinds in current_types.items():
+        say("·", f"{', '.join(kinds)} → {bundle}")
 
 
 def section(title: str) -> None:
@@ -277,8 +283,12 @@ def main() -> int:
     skills = sorted(p for p in SKILLS.iterdir() if (p / "SKILL.md").is_file())
     for target in SKILL_DIRS:
         prune(target)
+        current = 0
         for skill in skills:
-            link(skill, target / skill.name)
+            if not link(skill, target / skill.name, quiet_if_current=True):
+                current += 1
+        if current:
+            say("·", f"{current} skill link{'s' if current != 1 else ''} up to date in {tilde(target)}")
     if not skills:
         say("·", "no skills yet; add cerebrum/skills/<name>/SKILL.md")
 
