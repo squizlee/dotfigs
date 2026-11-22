@@ -28,7 +28,7 @@
 
   // --- window & workbench
   "window.zoomLevel": 1,
-  "workbench.colorTheme": "Dracula Theme",
+  "workbench.colorTheme": "Solarized Light",
   "workbench.iconTheme": "file-icons",
   "workbench.secondarySideBar.defaultVisibility": "hidden",
   "workbench.browser.openLocalhostLinks": false,
@@ -41,10 +41,10 @@
 
   // --- files & explorer
   "files.associations": {
-    "*.tmpl": "html"
+    "*.tmpl": "html",
   },
   "files.exclude": {
-    "**/.git": false
+    "**/.git": false,
   },
   "explorer.confirmDelete": false,
   "explorer.confirmDragAndDrop": false,
@@ -54,16 +54,16 @@
   "vim.insertModeKeyBindings": [
     {
       "before": ["j", "k"],
-      "after": ["<Esc>"]
-    }
+      "after": ["<Esc>"],
+    },
   ],
 
   // --- languages
   "[javascript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
   },
   "js/ts.experimental.useTsgo": true,
   "python.analysis.typeCheckingMode": "basic",
@@ -76,9 +76,9 @@
     "**/.gitea/workflows/*.yml",
     "**/.gitea/workflows/*.yaml",
     "**/.forgejo/workflows/*.yml",
-    "**/.forgejo/workflows/*.yaml"
+    "**/.forgejo/workflows/*.yaml",
   ],
 
   // --- extensions
-  "redhat.telemetry.enabled": false
+  "redhat.telemetry.enabled": false,
 }
