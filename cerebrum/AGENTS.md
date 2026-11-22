@@ -16,6 +16,7 @@ Lives in `~/dotfigs/cerebrum/` and is wired up by `init.py`.
 - Idempotent scripts: running twice should be a no-op, never destructive.
 - Never delete user data to make room. Back it up or stop and ask.
 - Verify before claiming done: run it, test it, show the output.
+- Don't launch or restart GUI apps from the shell (`open -a`, `killall`). They inherit the agent's env (e.g. `GIT_EDITOR=true`) and pass it to everything they spawn. Ask me to do it.
 
 ## Self-improvement
 

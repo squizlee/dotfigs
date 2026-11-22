@@ -6,5 +6,12 @@ if (( $+commands[starship] )); then
   eval "$(starship init zsh)"
 fi
 
+# Editor for git commit messages, crontab, etc.
+export EDITOR=vim
+export VISUAL=vim
+
+# Claude Code: no greyed-out suggested next prompt (it leaks answers in tutor skills).
+export CLAUDE_CODE_ENABLE_PROMPT_SUGGESTION=false
+
 # A little face in the prompt that reacts to failures, long commands, git, time of day.
 source "${0:A:h}/critter.zsh"

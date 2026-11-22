@@ -42,6 +42,9 @@ window-padding-x = 10
 window-padding-y = 8
 window-padding-balance = true
 macos-titlebar-style = tabs
+# Append new tabs at the end so tab order matches creation order and
+# cmd+j/cmd+k move predictably (default "current" inserts beside the active tab).
+window-new-tab-position = end
 
 # Phosphor bloom + faint scanlines; tune the constants at the top of the file.
 # Comment this out to turn it off.
