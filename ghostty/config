@@ -17,23 +17,23 @@ shell-integration-features = no-cursor
 selection-background = #4b5a2e
 selection-foreground = #00ff41
 
-# ANSI 0-7 normal, 8-15 bright. Red/yellow/blue kept distinct so errors and
-# diffs stay readable; everything else leans green.
+# ANSI 0-7 normal, 8-15 bright. Green base with real red/yellow/blue; the
+# magenta/cyan slots hold amber/khaki to fit the military look.
 palette = 0=#141a0d
 palette = 1=#ff6e5e
 palette = 2=#008f11
 palette = 3=#c4e000
-palette = 4=#00a86b
-palette = 5=#3fbf7f
-palette = 6=#00c932
+palette = 4=#5fafff
+palette = 5=#ffaf3f
+palette = 6=#d7c38a
 palette = 7=#9fdfa8
 palette = 8=#9aa877
 palette = 9=#ff6b6b
 palette = 10=#00ff41
 palette = 11=#e5ff4d
-palette = 12=#33d68a
-palette = 13=#6fffb0
-palette = 14=#5cff8f
+palette = 12=#87cfff
+palette = 13=#ffcf7f
+palette = 14=#f0e0b0
 palette = 15=#d6ffe0
 
 background-opacity = 0.95
